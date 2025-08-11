@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streak Hero</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Streak Hero🔥(Reminder)</h1>
+        <h2>Messages</h2>
+        <input type="text" id="message-input" placeholder="Type your message here">
+        <button onclick="renderMessage()">Save</button>
+        <ul id="message-list">
+            <!-- <li></li> -->
+        </ul>
+
+        <label for="remind-freq">Remind me every</label>
+        <select id="remind-freq">
+            <option value="3600000">1 hour</option>
+            <option value="7200000">2 hour</option>
+            <option value="10800000">3 hour</option>
+            <option value="21600000">6 hour</option>
+        </select>
+        <h2>🔥Let's keep the streak going</h2>
+       <div id="streak-container">
+        🔥Day: <span id="streak-count"></span>
+       </div>
+        <h1><span id="remain-time"></span></h1>
+        <button onclick="sendMassage()">Send Now</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
