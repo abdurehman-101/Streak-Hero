@@ -1,4 +1,4 @@
-window.onload = function() {
+
   const listContainer = document.getElementById("message-list");
   const remindFreq = document.getElementById("remind-freq");
   const remainTime = document.getElementById("remain-time");
@@ -38,16 +38,6 @@ window.onload = function() {
       messages.forEach(addMessageToList);
   }
 
-function reminder() { 
-    const now = new Date();
-    let hours = now.getHours();
-    hours = hours.toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const timeString = `Next streak in ${hours}h${minutes}m${seconds}s`;
-    remainTime.textContent = timeString;
-}
-setInterval(reminder, 1000);
   if (listContainer) {
     listContainer.addEventListener("click", event => {
         if(event.target.tagName === "SPAN"){
@@ -88,11 +78,11 @@ setInterval(reminder, 1000);
     updateCountdownDisplay();
   }
 
-//   function updateCountdownDisplay() {
-//     if (!remainTime) return;
-//     const timeString = `Next streak in ${countdownHours}h${countdownMinutes}m${countdownSeconds}s`;
-//     remainTime.textContent = timeString;
-//   }
+  function updateCountdownDisplay() {
+    if (!remainTime) return;
+    const timeString = `Next streak in ${countdownHours}h${countdownMinutes}m${countdownSeconds}s`;
+    remainTime.textContent = timeString;
+  }
 
   function tickCountdown() {
     if (countdown > 0) {
@@ -116,21 +106,22 @@ setInterval(reminder, 1000);
   }
   // Also reset after notification
   function notifyUser(){
-      if (Notification.permission === "granted") {
-          new Notification("Streak Hero", {
-              body: "Don't forget the streak",
-              icon: "icon.png"
-          });
-      }else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-              if (permission === "granted") {
-                  new Notification("Streak Hero", {
-                      body: "Don't forget the streak",
-                      icon: "icon.png"
-                  });
-              }
-          });
-      }
+    if('serviceworker' in navigator && 'Notification' in window){
+        Notification.requestPermission().then(Permission =>{
+            if(Permission === "granted"){
+                navigator.serviceWorker.register('sw.js').then(() =>{
+                    navigator.showNotfication('Streak Hero', {
+                        body: "Your Streak is ready to update!",
+                        icon: "icon.png",
+                        actions:[
+                            {action: "confirm", title:"Send"},
+                            {action: "later", title:"Later"}
+                        ]
+                    })
+                })
+            }
+        })
+    }
       setCountdown(); // reset countdown after notification
   }
 
@@ -157,131 +148,20 @@ setInterval(reminder, 1000);
   // Start timer on load
   startNotificationTimer();
 
-  function updateStreak() {
-      if (!streakCounter) return;
-      const lastSent = Number(localStorage.getItem("lastSent"));
-      const today = new Date();
-      const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-      let streak = Number(localStorage.getItem("currentStreak")) || 0;
-      if (!lastSent) {
-          streak = 1;
-          localStorage.setItem("lastSent", todayMidnight);
-          localStorage.setItem("currentStreak", streak);
-          return;
-      }
-      if (wasYesterday(lastSent, todayMidnight)) {
-          streak++;
-      } else if (lastSent !== todayMidnight) {
-          streak = 1;
-      }
-      localStorage.setItem("lastSent", todayMidnight);
-      localStorage.setItem("currentStreak", streak);
-  }
-
-  function wasYesterday(last, today) {
-      const difference = Math.floor((today - last) / (1000 * 60 * 60 * 24));
-      return difference === 1;
-  }
-  function displayStreak(){
-      if (!streakCounter) return;
-      const streak = localStorage.getItem("currentStreak") || 0;
-      streakCounter.textContent = streak;
-  }
-  displayStreak();
-
-  function getRandomMessage(){
-       if(messages.length == 0){
-          alert("No messages to send!");
-          return;
-      }
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      return messages[randomIndex];
-  }
-  function copyToClipBoard(text){
-      try{
-          navigator.clipboard.writeText(text).then(() =>{
-              alert("Message copied!");
-          });
-      } catch(err) {
-          console.error("Failed to copy text: ", err);
-      }
-  }
-
-  function sendMassage(){
-     const message = getRandomMessage();
-     if (message) {
-         copyToClipBoard(message);
-         window.open("https://www.tiktok.com/messages");
-     }
-  }
-}
-const listContainer = document.getElementById("message-list");
-const remindFreq = document.getElementById("remind-freq");
-const remainTime = document.getElementById("remain-time");
-const streakCounter = document.getElementById("day-count");
-
-const messageInput = document.getElementById("message-input");
-let messages = JSON.parse(localStorage.getItem("myMessage")) || [];
-
-function saveMessages(){
-    localStorage.setItem("myMessage", JSON.stringify(messages));
-}
-function renderMessage(){
-    const message = messageInput.value.trim();
-    if (message === "") {
-        alert("Please enter a message");
-        return;
-    }
-    messages.push(message);
-    addMessageToList(message);
-    saveMessages();
-    messageInput.value = "";
-}
-
-function addMessageToList(message) {
-    let li = document.createElement("li");
-    li.innerHTML = message;
-    let span = document.createElement("span");
-    span.innerHTML = "\u00d7";
-    li.appendChild(span);
-    listContainer.appendChild(li);
-}
-
-function renderAllMessages() {
-    listContainer.innerHTML = "";
-    messages.forEach(addMessageToList);
-}
-
-listContainer.addEventListener("click", event => {
-    if(event.target.tagName === "SPAN"){
-        const li = event.target.parentElement;
-        const text = li.firstChild.textContent;
-        li.remove();
-        messages = messages.filter(msg => msg !== text);
-        saveMessages();
-    }
-});
-
 
 // Render all messages on page load
+renderAllMessages();
+function reminder() { 
+    const now = new Date();
+    let hours = now.getHours();
+    hours = hours.toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const timeString = `Next Streak in ${hours}h${minutes}m${seconds}s`;
+    remainTime.textContent = timeString;
+}
+setInterval(reminder, 1000);
 
-
- function notifyUser(){
-     if (Notification.permission === "granted") {
-        new Notification("Streak Hero", {
-            body: "Don't forget the streak",
-            icon: "icon.png"
-        })}else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-                new Notification("Streak Hero", {
-                    body: "Don't forget the streak",
-                    icon: "icon.png"
-                });
-            }
-        });
-    }
- }
 
 function updateStreak() {
     const lastSent = Number(localStorage.getItem("lastSent"));
@@ -336,7 +216,8 @@ function sendMassage(){
    const message = getRandomMessage();
    if (message) {
        copyToClipBoard(message);
-       window.open("https://www.tiktok.com/messages");
+       setInterval( window.open("https://www.tiktok.com/messages"), 2000)
+
    }
 }
 
