@@ -1,75 +1,86 @@
-*{
+/* Base: Mobile First */
+* {
     margin: 0;
     padding: 0;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     box-sizing: border-box;
 }
 
-.container{
+.container {
     display: block;
     text-align: center;
-    padding: 20px;
+    padding: 16px;
     width: 100%;
     border: none;
     border-radius: 10px;
-    box-shadow: 1px 1px 5px #0000004d ;
+    box-shadow: 1px 1px 5px #0000004d;
 }
-.container h1{
-    font-size: 2rem;
-    margin: 10px;
+
+.container h1 {
+    font-size: 1.6rem; /* Smaller default for mobile */
+    margin: 12px 0;
 }
-input{
-  width: 100%;
-  box-sizing: border-box;
-    margin: 10px 4px;
-    padding: 6px 30px;
+
+input {
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px 14px;
     border: none;
     border-radius: 25px;
     background-color: #e8e5e5;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
-button{
-    padding: 8px 20px;
-    font-size: 1.1rem;
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
     border: none;
     border-radius: 10px;
     background-color: #ff1e62;
     color: #e8e5e5;
     cursor: pointer;
 }
-#remind-freq{
-    margin: 10px;
+
+#remind-freq {
+    width: 100%;
+    margin: 8px 0;
     font-size: 1rem;
     font-weight: bold;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #e8e5e5;
 }
-ul li{
+
+ul li {
     list-style: none;
     margin: 8px 0;
-    padding: 6px;
+    padding: 10px 14px;
     text-align: left;
     background-color: #e8e5e5;
     border-radius: 10px;
     color: #121011;
-    list-style: none;
-    font-size: 17px;
-    padding-left: 15px;
+    font-size: 1rem;
     user-select: none;
     cursor: pointer;
     position: relative;
 }
-ul li span{
+
+ul li span {
     position: absolute;
-    right: 0;
-    top: -5px;
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
     color: #080707;
-    line-height: 40px;
+    line-height: 36px;
     text-align: center;
     border-radius: 50%;
     cursor: pointer;
 }
+
 option {
     font-size: 1rem;
     padding: 8px 12px;
@@ -79,42 +90,45 @@ option {
     border: none;
     font-family: inherit;
 }
-/* Tablet/Desktop styles */
-@media (min-width: 600px) {
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 32px;
-  }
-  .container h1 {
-    font-size: 2rem;
-    margin: 16px;
-  }
-  input {
-    margin: 12px 6px;
-    padding: 8px 32px;
-    font-size: 1.2rem;
-  }
-  button {
-    padding: 10px 24px;
-    font-size: 1.1rem;
-  }
-  #remind-freq {
-    margin: 12px;
-    font-size: 1.1rem;
-  }
-  option {
-    font-size: 1.1rem;
-    padding: 10px 16px;
-    border-radius: 10px;
-  }
-}
+
 #streak-container {
-    margin: 10px 0;
-    /* background: gold; */
+    margin: 12px 0;
     padding: 10px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1rem;
     display: inline-block;
+}
+
+/* Tablet and Up */
+@media (min-width: 600px) {
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    .container h1 {
+        font-size: 2rem;
+    }
+
+    input {
+        font-size: 1.2rem;
+        padding: 12px 20px;
+    }
+
+    button {
+        width: auto;
+        font-size: 1.1rem;
+        padding: 10px 24px;
+    }
+
+    #remind-freq {
+        width: auto;
+        font-size: 1.1rem;
+    }
+
+    ul li {
+        font-size: 1.1rem;
+    }
 }
