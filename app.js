@@ -216,7 +216,7 @@ function sendMassage(){
    const message = getRandomMessage();
    if (message) {
        copyToClipBoard(message);
-       setInterval( window.open("https://www.tiktok.com/messages"), 2000)
+    window.open("https://www.tiktok.com/messages");
 
    }
 }
